@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>복약도우미 샘플 대화 — 시각장애인 복약관리 챗봇</title>
+<meta name="description" content="복약도우미 시각장애인 복약관리 앱의 샘플 대화입니다. 처방전 기록, 약물 상호작용 확인, 복용 기록 기능을 보여줍니다.">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700&display=swap');
+
+  :root {
+    --bg: #0b0e14;
+    --surface: #151a24;
+    --surface-elevated: #1c2230;
+    --user-bubble: #2563eb;
+    --user-bubble-text: #ffffff;
+    --bot-bubble: #1e2736;
+    --bot-bubble-text: #e2e8f0;
+    --accent: #60a5fa;
+    --accent-soft: rgba(96, 165, 250, 0.12);
+    --text-primary: #f1f5f9;
+    --text-secondary: #94a3b8;
+    --text-muted: #64748b;
+    --divider: rgba(148, 163, 184, 0.1);
+    --radius: 1.125rem;
+    --radius-sm: 0.75rem;
+    --shadow: 0 2px 12px rgba(0,0,0,0.25);
+    --font: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, sans-serif;
+  }
+
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  html {
+    font-size: 16px;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    font-family: var(--font);
+    background: var(--bg);
+    color: var(--text-primary);
+    line-height: 1.7;
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── Skip link ── */
+  .skip-link {
+    position: absolute;
+    top: -100%;
+    left: 1rem;
+    background: var(--accent);
+    color: #000;
+    padding: 0.75rem 1.25rem;
+    border-radius: var(--radius-sm);
+    font-weight: 600;
+    z-index: 1000;
+    text-decoration: none;
+  }
+  .skip-link:focus {
+    top: 1rem;
+  }
+
+  /* ── Page header ── */
+  .page-header {
+    background: var(--surface);
+    border-bottom: 1px solid var(--divider);
+    padding: 1.5rem 1rem;
+    text-align: center;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    backdrop-filter: blur(12px);
+  }
+  .page-header h1 {
+    font-size: 1.125rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+  }
+  .page-header h1 .icon {
+    font-size: 1.35rem;
+  }
+  .page-header .subtitle {
+    font-size: 0.8125rem;
+    color: var(--text-muted);
+    margin-top: 0.25rem;
+  }
+  .badge {
+    display: inline-block;
+    background: var(--accent-soft);
+    color: var(--accent);
+    font-size: 0.6875rem;
+    font-weight: 600;
+    padding: 0.2rem 0.55rem;
+    border-radius: 999px;
+    margin-top: 0.5rem;
+    letter-spacing: 0.02em;
+  }
+
+  /* ── Chat container ── */
+  .chat-container {
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 1rem 1rem 3rem;
+  }
+
+
+
+  /* ── Message row ── */
+  .message-row {
+    display: flex;
+    margin-bottom: 0.625rem;
+    animation: fadeSlide 0.3s ease both;
+  }
+  .message-row.user {
+    justify-content: flex-end;
+  }
+  .message-row.bot {
+    justify-content: flex-start;
+  }
+
+  @keyframes fadeSlide {
+    from { opacity: 0; transform: translateY(6px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── Bubbles ── */
+  .bubble {
+    max-width: 85%;
+    padding: 0.875rem 1.125rem;
+    font-size: 0.9375rem;
+    line-height: 1.7;
+    position: relative;
+    word-break: keep-all;
+    overflow-wrap: break-word;
+  }
+
+  .message-row.user .bubble {
+    background: var(--user-bubble);
+    color: var(--user-bubble-text);
+    border-radius: var(--radius) var(--radius) 4px var(--radius);
+    box-shadow: 0 2px 8px rgba(37, 99, 235, 0.25);
+  }
+
+  .message-row.bot .bubble {
+    background: var(--bot-bubble);
+    color: var(--bot-bubble-text);
+    border-radius: var(--radius) var(--radius) var(--radius) 4px;
+    box-shadow: var(--shadow);
+  }
+
+  /* ── Structured content inside bot bubbles ── */
+  .bubble h3 {
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: var(--accent);
+    margin: 1rem 0 0.375rem;
+    letter-spacing: -0.01em;
+  }
+  .bubble h3:first-child {
+    margin-top: 0;
+  }
+  .bubble p {
+    margin-bottom: 0.5rem;
+  }
+  .bubble p:last-child {
+    margin-bottom: 0;
+  }
+  .bubble ul, .bubble ol {
+    padding-left: 1.25rem;
+    margin-bottom: 0.5rem;
+  }
+  .bubble li {
+    margin-bottom: 0.25rem;
+  }
+  .bubble strong {
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+  .bubble .drug-name {
+    color: var(--accent);
+    font-weight: 600;
+  }
+  .bubble .highlight-box {
+    background: rgba(96, 165, 250, 0.08);
+    border-left: 3px solid var(--accent);
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    padding: 0.625rem 0.875rem;
+    margin: 0.75rem 0;
+    font-size: 0.875rem;
+  }
+  .bubble .record-list {
+    list-style: none;
+    padding-left: 0;
+  }
+  .bubble .record-list li {
+    padding: 0.375rem 0;
+    border-bottom: 1px solid var(--divider);
+    font-size: 0.875rem;
+  }
+  .bubble .record-list li:last-child {
+    border-bottom: none;
+  }
+  .bubble .record-id {
+    color: var(--text-muted);
+    font-size: 0.75rem;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* ── Prescription card ── */
+  .rx-card {
+    background: var(--surface-elevated);
+    border: 1px solid var(--divider);
+    border-radius: var(--radius-sm);
+    padding: 0.875rem;
+    margin: 0.75rem 0;
+  }
+  .rx-card-title {
+    font-size: 0.8125rem;
+    font-weight: 700;
+    color: var(--accent);
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.375rem;
+  }
+  .rx-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 0.3rem 0;
+    border-bottom: 1px solid var(--divider);
+    font-size: 0.8125rem;
+  }
+  .rx-item:last-child {
+    border-bottom: none;
+  }
+  .rx-item .name {
+    font-weight: 500;
+  }
+  .rx-item .dosage {
+    color: var(--text-muted);
+    font-size: 0.75rem;
+    text-align: right;
+    flex-shrink: 0;
+    margin-left: 0.5rem;
+  }
+
+  /* ── Sender label (screen-reader visible, visually hidden) ── */
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+  }
+
+  /* ── Visible sender label ── */
+  .sender-label {
+    font-size: 0.6875rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    margin-bottom: 0.25rem;
+    padding-left: 0.25rem;
+  }
+  .message-row.user .sender-label {
+    text-align: right;
+    padding-right: 0.25rem;
+    padding-left: 0;
+  }
+
+  /* ── Footer ── */
+  .page-footer {
+    text-align: center;
+    padding: 2rem 1rem;
+    border-top: 1px solid var(--divider);
+    max-width: 640px;
+    margin: 0 auto;
+  }
+  .page-footer p {
+    font-size: 0.8125rem;
+    color: var(--text-muted);
+    line-height: 1.6;
+  }
+  .page-footer a {
+    color: var(--accent);
+    text-decoration: none;
+  }
+  .page-footer a:hover,
+  .page-footer a:focus {
+    text-decoration: underline;
+  }
+
+  /* ── Focus visible ── */
+  :focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+
+  /* ── High contrast mode support ── */
+  @media (forced-colors: active) {
+    .message-row.user .bubble {
+      border: 2px solid ButtonText;
+    }
+    .message-row.bot .bubble {
+      border: 2px solid ButtonText;
+    }
+  }
+
+  /* ── Reduced motion ── */
+  @media (prefers-reduced-motion: reduce) {
+    .message-row {
+      animation: none;
+    }
+    html {
+      scroll-behavior: auto;
+    }
+  }
+
+  /* ── Print ── */
+  @media print {
+    body { background: #fff; color: #000; }
+    .page-header { position: static; background: none; }
+    .message-row.user .bubble { background: #e8e8e8; color: #000; box-shadow: none; }
+    .message-row.bot .bubble { background: #f5f5f5; color: #000; box-shadow: none; border: 1px solid #ccc; }
+    .bubble h3, .drug-name, .rx-card-title { color: #000; }
+  }
+</style>
+</head>
+<body>
+
+<a href="#chat-log" class="skip-link">대화 내용으로 건너뛰기</a>
+
+<header class="page-header" role="banner">
+  <h1><span class="icon" aria-hidden="true">💊</span> 복약도우미 샘플 대화</h1>
+  <p class="subtitle">시각장애인 복약관리 AI 챗봇</p>
+  <span class="badge" aria-label="샘플 데모">SAMPLE DEMO</span>
+</header>
+
+<main id="chat-log" class="chat-container" role="log" aria-label="복약도우미 챗봇 샘플 대화 내용" aria-live="polite">
+
+
+    <!-- User message -->
+    <div class="message-row user" role="article" aria-label="사용자 메시지">
+      <div>
+        <div class="sender-label" aria-hidden="true">사용자</div>
+        <div class="bubble">
+          <span class="sr-only">사용자: </span>
+          처방전 기록해줘.
+        </div>
+      </div>
+    </div>
+
+    <!-- Bot response -->
+    <div class="message-row bot" role="article" aria-label="복약도우미 응답">
+      <div>
+        <div class="sender-label" aria-hidden="true">복약도우미</div>
+        <div class="bubble">
+          <span class="sr-only">복약도우미: </span>
+          <p>처방전이 기록되었습니다. 복용 약 목록(간단):</p>
+
+          <div class="rx-card" role="table" aria-label="처방 약 목록">
+            <div class="rx-card-title" role="caption"><span aria-hidden="true">📋</span> 처방 목록</div>
+            <div class="rx-item" role="row">
+              <span class="name" role="cell">1) 유토펜 세미 정</span>
+              <span class="dosage" role="cell">1정, 1일 2회, 7일분 (총 14정)</span>
+            </div>
+            <div class="rx-item" role="row">
+              <span class="name" role="cell">2) 아크로펜정(아세클로페낙) 0.1g</span>
+              <span class="dosage" role="cell">1정, 1일 2회, 14일분 (총 28정)</span>
+            </div>
+            <div class="rx-item" role="row">
+              <span class="name" role="cell">3) 엔테론정 150mg</span>
+              <span class="dosage" role="cell">1정, 1일 2회, 14일분 (총 28정)</span>
+            </div>
+            <div class="rx-item" role="row">
+              <span class="name" role="cell">4) 넥신에프정 80mg</span>
+              <span class="dosage" role="cell">1정, 1일 2회, 14일분 (총 28정)</span>
+            </div>
+            <div class="rx-item" role="row">
+              <span class="name" role="cell">5) 레미스타 정</span>
+              <span class="dosage" role="cell">1정, 1일 2회, 14일분 (총 28정)</span>
+            </div>
+          </div>
+
+          <p>복용방법: 대부분 아침·저녁 식후 또는 지시에 따라 복용하라고 적혀 있습니다.</p>
+          <p>원하시면 각 약의 효능·부작용이나 서로 간의 상호작용을 확인해 드릴게요.</p>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- User message: 약물 간 상호작용 -->
+    <div class="message-row user" role="article" aria-label="사용자 메시지">
+      <div>
+        <div class="sender-label" aria-hidden="true">사용자</div>
+        <div class="bubble">
+          <span class="sr-only">사용자: </span>
+          처방받은 약들끼리 같이 먹어도 괜찮은 거야? 상호작용 확인해줘.
+        </div>
+      </div>
+    </div>
+
+    <!-- Bot response: 약물 간 상호작용 -->
+    <div class="message-row bot" role="article" aria-label="복약도우미 응답">
+      <div>
+        <div class="sender-label" aria-hidden="true">복약도우미</div>
+        <div class="bubble">
+          <span class="sr-only">복약도우미: </span>
+          <p>처방된 5가지 약의 상호작용을 확인했습니다. 주의할 조합과 안전한 조합을 나눠서 알려드릴게요.</p>
+
+          <h3><span class="drug-name">⚠️ 주의가 필요한 조합</span></h3>
+
+          <h3>유토펜 (트라마돌) + 아크로펜 (아세클로페낙)</h3>
+          <p>둘 다 진통제이지만 계열이 다릅니다. 트라마돌은 마약성, 아세클로페낙은 비스테로이드성(NSAID)입니다. 함께 쓸 수 있지만, 드물게 트라마돌의 <strong>경련(발작) 위험</strong>이 NSAID와 병용 시 높아질 수 있다는 보고가 있습니다. 경련 이력이 있으시면 반드시 의사에게 알리세요.</p>
+
+          <h3>넥신에프 (은행엽추출물) + 아크로펜 (아세클로페낙)</h3>
+          <p>은행엽추출물은 <strong>항혈소판 작용</strong>(피를 묽게 하는 효과)이 있고, NSAID인 아세클로페낙도 출혈 위험을 높입니다. 두 약을 함께 복용하면 <strong>위장출혈이나 멍이 드는 경향</strong>이 증가할 수 있으니, 잇몸 출혈·코피·검은 변이 나타나면 바로 병원에 가세요.</p>
+
+          <h3>넥신에프 (은행엽추출물) + 유토펜 (트라마돌)</h3>
+          <p>은행엽추출물이 <strong>경련 역치를 낮출 수</strong> 있다는 연구가 있어, 트라마돌의 경련 위험과 겹칠 가능성이 있습니다. 실제 빈도는 매우 낮지만 두통·어지러움이 심해지면 주의하세요.</p>
+
+          <h3><span class="drug-name">✅ 안전한 조합</span></h3>
+
+          <h3>레미스타 (레바미피드)</h3>
+          <p>위점막 보호제입니다. NSAID인 아크로펜의 위장 부작용을 줄이기 위해 <strong>의도적으로 함께 처방</strong>된 약이므로, 반드시 빠뜨리지 말고 드세요.</p>
+
+          <h3>엔테론 (포도씨 추출물)</h3>
+          <p>항산화 보조제로, 다른 처방약과 <strong>임상적으로 의미 있는 상호작용은 보고되지 않았습니다.</strong></p>
+
+          <div class="highlight-box" role="note" aria-label="종합 요약">
+            <strong>종합:</strong> 전체적으로 의사가 상호작용을 고려해서 처방한 조합이므로 지시대로 복용하시면 됩니다. 다만 은행엽추출물(넥신에프)과 NSAID(아크로펜) 병용 시 출혈 징후, 트라마돌(유토펜) 복용 중 어지러움·경련 징후에는 주의해 주세요. 다른 궁금한 점 있으세요?
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- User message: 커피 상호작용 -->
+    <div class="message-row user" role="article" aria-label="사용자 메시지">
+      <div>
+        <div class="sender-label" aria-hidden="true">사용자</div>
+        <div class="bubble">
+          <span class="sr-only">사용자: </span>
+          약 중에 커피랑 같이 먹으면 안 되는 약이 있을까?
+        </div>
+      </div>
+    </div>
+
+    <!-- Bot response -->
+    <div class="message-row bot" role="article" aria-label="복약도우미 응답">
+      <div>
+        <div class="sender-label" aria-hidden="true">복약도우미</div>
+        <div class="bubble">
+          <span class="sr-only">복약도우미: </span>
+          <p>확인해보니 처방약들 가운데 커피(카페인)와 반드시 피해야 한다고 명시된 약은 없습니다. 요점만 간단히 알려드릴게요.</p>
+
+          <h3><span class="drug-name">유토펜 세미 (트라마돌+아세트아미노펜)</span></h3>
+          <p>커피와의 명백한 금기는 없습니다. 다만 알코올·진정제와 같이 복용하면 호흡억제·과도한 진정 위험이 있으니 술은 피하세요.</p>
+
+          <h3><span class="drug-name">아크로펜정 (아세클로페낙, NSAID)</span></h3>
+          <p>커피 자체와 금기는 아니지만 속쓰림·위장출혈 위험이 있으니 공복에 진하게 마시는 커피는 피하는 편이 좋습니다.</p>
+
+          <h3><span class="drug-name">엔테론 (포도씨 추출물), 넥신에프 (은행엽추출물), 레미스타 (레바미피드)</span></h3>
+          <p>일반적으로 커피와 직접적인 금기는 보고되지 않았습니다.</p>
+
+          <div class="highlight-box" role="note" aria-label="요약">
+            <strong>요약:</strong> 약과 커피를 함께 먹어도 큰 문제는 드물지만, 속쓰림이 있거나 위가 약하시면 공복에 진한 커피는 피하세요. 음주는 일부 약과 위험하니 절대 삼가야 합니다. 평소 하루에 커피를 많이 드시나요? 용량에 따라 더 주의할 부분이 있을 수 있어요.
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- User message -->
+    <div class="message-row user" role="article" aria-label="사용자 메시지">
+      <div>
+        <div class="sender-label" aria-hidden="true">사용자</div>
+        <div class="bubble">
+          <span class="sr-only">사용자: </span>
+          하루에 커피 3잔 정도 마시는 거 같아
+        </div>
+      </div>
+    </div>
+
+    <!-- Bot response -->
+    <div class="message-row bot" role="article" aria-label="복약도우미 응답">
+      <div>
+        <div class="sender-label" aria-hidden="true">복약도우미</div>
+        <div class="bubble">
+          <span class="sr-only">복약도우미: </span>
+          <p>하루 커피 3잔이면 크게 문제될 가능성은 낮습니다. 다만 주의할 점만 간단히 알려드릴게요.</p>
+
+          <h3>트라마돌+아세트아미노펜 (유토펜)</h3>
+          <p>커피 자체와 직접적인 심한 상호작용은 없지만 카페인으로 인한 불면·불안·가슴두근거림이 생기면 진통제 부작용(어지러움, 졸음 등)이 더 불편하게 느껴질 수 있습니다.</p>
+          <p>아세트아미노펜의 간독성 위험이 있으니 술을 많이 마실 때까지 술은 피하세요.</p>
+
+          <h3>아세클로페낙 (아크로펜)</h3>
+          <p>커피는 공복에 진하게 마시면 속쓰림·위장 불편을 더 잘 느낄 수 있으니, 약처럼 아침·저녁 식후 복용하신다면 식사 후에 커피를 드시는 편이 안전합니다.</p>
+
+          <h3>다른 보조제 (엔테론, 넥신에프, 레미스타)</h3>
+          <p>커피와 큰 문제는 없습니다.</p>
+
+          <div class="highlight-box" role="note" aria-label="권장 사항">
+            <strong>권장:</strong> 가능하시면 커피를 하루 3잔 이하로 유지하시고, 식후에 드시면 위에 부담이 덜합니다. 술이나 흡연을 하시는지 알려주시면 건강상태에 맞는 더 자세한 안내를 드리겠습니다. 다른 궁금한 점 있으세요?
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- User message -->
+    <div class="message-row user" role="article" aria-label="사용자 메시지">
+      <div>
+        <div class="sender-label" aria-hidden="true">사용자</div>
+        <div class="bubble">
+          <span class="sr-only">사용자: </span>
+          10월 15일에 처방받은 약 다 먹었는데 기록해줄 수 있어?
+        </div>
+      </div>
+    </div>
+
+    <!-- Bot response -->
+    <div class="message-row bot" role="article" aria-label="복약도우미 응답">
+      <div>
+        <div class="sender-label" aria-hidden="true">복약도우미</div>
+        <div class="bubble">
+          <span class="sr-only">복약도우미: </span>
+          <p>10월 15일 복용 기록을 모두 저장했습니다.</p>
+
+          <div class="rx-card" role="list" aria-label="기록된 약 목록">
+            <div class="rx-card-title"><span aria-hidden="true">✅</span> 기록된 약</div>
+            <ul class="record-list" role="list">
+              <li role="listitem">
+                유토펜세미정 — 2025-10-15 복용
+                <br><span class="record-id">ID: 640004590</span>
+              </li>
+              <li role="listitem">
+                아크로펜정 (아세클로페낙) — 2025-10-15 복용
+                <br><span class="record-id">ID: 642502460</span>
+              </li>
+              <li role="listitem">
+                엔테론정 150mg — 2025-10-15 복용
+                <br><span class="record-id">ID: 645301210</span>
+              </li>
+              <li role="listitem">
+                넥신에프정 80mg — 2025-10-15 복용
+                <br><span class="record-id">ID: 644700140</span>
+              </li>
+              <li role="listitem">
+                레미스타정 — 2025-10-15 복용
+                <br><span class="record-id">ID: 657306920</span>
+              </li>
+            </ul>
+          </div>
+
+          <p>다른 날짜도 기록하거나 복용 횟수를 확인할까요?</p>
+        </div>
+      </div>
+    </div>
+
+</main>
+
+<footer class="page-footer" role="contentinfo">
+  <p>
+    이 페이지는 <strong>복약도우미</strong> 앱의 샘플 대화입니다.<br>
+    실제 의료 조언이 아니며 데모 목적으로 제작되었습니다.<br>
+    접근성 문의: <a href="mailto:saanhong@snu.ac.kr">saanhong@snu.ac.kr</a>
+  </p>
+</footer>
+
+</body>
+</html>
