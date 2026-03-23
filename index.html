@@ -174,16 +174,7 @@
     box-shadow: var(--shadow);
   }
 
-  /* ── Structured content inside bot bubbles ── */
-  .bubble h3 {
-    font-size: 0.9375rem;
-    font-weight: 500;
-    color: inherit;
-    margin: 1rem 0 0.375rem;
-  }
-  .bubble h3:first-child {
-    margin-top: 0;
-  }
+
   .bubble p {
     margin-bottom: 0.5rem;
   }
@@ -308,7 +299,7 @@
     .page-header { position: static; background: none; }
     .message-row.user .bubble { background: #e8e8e8; color: #000; box-shadow: none; }
     .message-row.bot .bubble { background: #f5f5f5; color: #000; box-shadow: none; border: 1px solid #ccc; }
-    .bubble h3, .rx-card-title { color: #000; }
+    .rx-card-title { color: #000; }
   }
 </style>
 </head>
@@ -322,11 +313,11 @@
   <span class="badge" aria-label="샘플 데모">SAMPLE DEMO</span>
 </header>
 
-<main id="chat-log" class="chat-container" role="log" aria-label="복약도우미 챗봇 샘플 대화 내용" aria-live="polite">
+<main id="chat-log" class="chat-container" aria-label="복약도우미 챗봇 샘플 대화 내용">
 
 
     <!-- User message -->
-    <div class="message-row user" role="article" aria-label="사용자 메시지">
+    <div class="message-row user">
       <div>
         <div class="bubble">
           <span class="tag tag-user">사용자</span>
@@ -336,33 +327,33 @@
     </div>
 
     <!-- Bot response -->
-    <div class="message-row bot" role="article" aria-label="복약도우미 응답">
+    <div class="message-row bot">
       <div>
         <div class="bubble">
           <span class="tag tag-bot">챗봇</span>
           <p>처방전이 기록되었습니다. 복용 약 목록(간단):</p>
 
-          <div class="rx-card" role="table" aria-label="처방 약 목록">
-            <div class="rx-card-title" role="caption">처방 목록</div>
-            <div class="rx-item" role="row">
-              <span class="name" role="cell">1) 유토펜 세미 정</span>
-              <span class="dosage" role="cell">1정, 1일 2회, 7일분 (총 14정)</span>
+          <div class="rx-card">
+            <div class="rx-card-title">처방 목록</div>
+            <div class="rx-item">
+              <span class="name">1) 유토펜 세미 정</span>
+              <span class="dosage">1정, 1일 2회, 7일분 (총 14정)</span>
             </div>
-            <div class="rx-item" role="row">
-              <span class="name" role="cell">2) 아크로펜정(아세클로페낙) 0.1g</span>
-              <span class="dosage" role="cell">1정, 1일 2회, 14일분 (총 28정)</span>
+            <div class="rx-item">
+              <span class="name">2) 아크로펜정(아세클로페낙) 0.1g</span>
+              <span class="dosage">1정, 1일 2회, 14일분 (총 28정)</span>
             </div>
-            <div class="rx-item" role="row">
-              <span class="name" role="cell">3) 엔테론정 150mg</span>
-              <span class="dosage" role="cell">1정, 1일 2회, 14일분 (총 28정)</span>
+            <div class="rx-item">
+              <span class="name">3) 엔테론정 150mg</span>
+              <span class="dosage">1정, 1일 2회, 14일분 (총 28정)</span>
             </div>
-            <div class="rx-item" role="row">
-              <span class="name" role="cell">4) 넥신에프정 80mg</span>
-              <span class="dosage" role="cell">1정, 1일 2회, 14일분 (총 28정)</span>
+            <div class="rx-item">
+              <span class="name">4) 넥신에프정 80mg</span>
+              <span class="dosage">1정, 1일 2회, 14일분 (총 28정)</span>
             </div>
-            <div class="rx-item" role="row">
-              <span class="name" role="cell">5) 레미스타 정</span>
-              <span class="dosage" role="cell">1정, 1일 2회, 14일분 (총 28정)</span>
+            <div class="rx-item">
+              <span class="name">5) 레미스타 정</span>
+              <span class="dosage">1정, 1일 2회, 14일분 (총 28정)</span>
             </div>
           </div>
 
@@ -374,7 +365,7 @@
 
 
     <!-- User message: 약 기능/질환 -->
-    <div class="message-row user" role="article" aria-label="사용자 메시지">
+    <div class="message-row user">
       <div>
         <div class="bubble">
           <span class="tag tag-user">사용자</span>
@@ -384,25 +375,25 @@
     </div>
 
     <!-- Bot response: 약 기능/질환 -->
-    <div class="message-row bot" role="article" aria-label="복약도우미 응답">
+    <div class="message-row bot">
       <div>
         <div class="bubble">
           <span class="tag tag-bot">챗봇</span>
           <p>처방된 약 5가지의 기능과 관련 질환을 하나씩 설명해 드릴게요.</p>
 
-          <h3>1) 유토펜 세미 (트라마돌+아세트아미노펜)</h3>
+          <p>1) 유토펜 세미 (트라마돌+아세트아미노펜)</p>
           <p>중등도 이상의 통증을 줄여주는 복합 진통제입니다. 트라마돌은 뇌에서 통증 신호를 차단하고, 아세트아미노펜은 열과 통증을 함께 줄여줍니다. 관절통, 요통, 수술 후 통증, 신경통 등 일반 진통제로 잘 안 잡히는 통증에 처방됩니다.</p>
 
-          <h3>2) 아크로펜 (아세클로페낙 0.1g)</h3>
+          <p>2) 아크로펜 (아세클로페낙 0.1g)</p>
           <p>비스테로이드성 소염진통제(NSAID)입니다. 통증뿐 아니라 염증 자체를 줄여주는 약입니다. 관절염, 류마티스 관절염, 강직성 척추염, 근골격계 염증성 통증에 주로 처방됩니다. 유토펜이 중추신경에서 통증을 잡는다면, 이 약은 염증 부위에서 직접 작용합니다.</p>
 
-          <h3>3) 엔테론 (포도씨 추출물 150mg)</h3>
+          <p>3) 엔테론 (포도씨 추출물 150mg)</p>
           <p>항산화 작용을 하는 보조제입니다. 혈관벽을 보호하고 모세혈관 투과성을 줄여줍니다. 만성 정맥부전(다리 붓기, 무거움), 부종, 미세순환 장애에 처방됩니다. 직접적인 진통 효과는 없지만 혈관 건강을 돕는 역할입니다.</p>
 
-          <h3>4) 넥신에프 (은행엽추출물 80mg)</h3>
+          <p>4) 넥신에프 (은행엽추출물 80mg)</p>
           <p>혈행 개선제입니다. 말초 혈액순환을 촉진하고, 혈소판 응집을 억제합니다. 말초동맥순환 장애(손발 저림, 차가움), 이명, 어지러움, 말초 혈행 장애에 처방됩니다.</p>
 
-          <h3>5) 레미스타 (레바미피드)</h3>
+          <p>5) 레미스타 (레바미피드)</p>
           <p>위점막 보호제입니다. 위벽에 점액 분비를 촉진해서 위를 보호합니다. 위염, 위궤양 치료 및 예방에 사용되며, 이번 처방에서는 아크로펜(NSAID)이 위를 자극할 수 있어서 그 부작용을 막기 위해 함께 처방된 것으로 보입니다.</p>
 
           <p>전체적으로 보면 통증과 염증을 잡는 약(유토펜, 아크로펜), 혈액순환을 돕는 약(엔테론, 넥신에프), 그리고 위장을 보호하는 약(레미스타)으로 구성되어 있습니다. 정형외과나 통증의학과에서 근골격계 통증과 순환 장애를 함께 치료하기 위한 처방으로 보여요. 혹시 더 궁금한 약이 있으세요?</p>
@@ -412,7 +403,7 @@
 
 
     <!-- User message: 약물 간 상호작용 -->
-    <div class="message-row user" role="article" aria-label="사용자 메시지">
+    <div class="message-row user">
       <div>
         <div class="bubble">
           <span class="tag tag-user">사용자</span>
@@ -422,29 +413,29 @@
     </div>
 
     <!-- Bot response: 약물 간 상호작용 -->
-    <div class="message-row bot" role="article" aria-label="복약도우미 응답">
+    <div class="message-row bot">
       <div>
         <div class="bubble">
           <span class="tag tag-bot">챗봇</span>
           <p>처방된 5가지 약의 상호작용을 확인했습니다. 주의할 조합과 안전한 조합을 나눠서 알려드릴게요.</p>
 
-          <h3>주의가 필요한 조합</h3>
+          <p>주의가 필요한 조합</p>
 
-          <h3>유토펜 (트라마돌) + 아크로펜 (아세클로페낙)</h3>
+          <p>유토펜 (트라마돌) + 아크로펜 (아세클로페낙)</p>
           <p>둘 다 진통제이지만 계열이 다릅니다. 트라마돌은 마약성, 아세클로페낙은 비스테로이드성(NSAID)입니다. 함께 쓸 수 있지만, 드물게 트라마돌의 경련(발작) 위험이 NSAID와 병용 시 높아질 수 있다는 보고가 있습니다. 경련 이력이 있으시면 반드시 의사에게 알리세요.</p>
 
-          <h3>넥신에프 (은행엽추출물) + 아크로펜 (아세클로페낙)</h3>
+          <p>넥신에프 (은행엽추출물) + 아크로펜 (아세클로페낙)</p>
           <p>은행엽추출물은 항혈소판 작용(피를 묽게 하는 효과)이 있고, NSAID인 아세클로페낙도 출혈 위험을 높입니다. 두 약을 함께 복용하면 위장출혈이나 멍이 드는 경향이 증가할 수 있으니, 잇몸 출혈·코피·검은 변이 나타나면 바로 병원에 가세요.</p>
 
-          <h3>넥신에프 (은행엽추출물) + 유토펜 (트라마돌)</h3>
+          <p>넥신에프 (은행엽추출물) + 유토펜 (트라마돌)</p>
           <p>은행엽추출물이 경련 역치를 낮출 수 있다는 연구가 있어, 트라마돌의 경련 위험과 겹칠 가능성이 있습니다. 실제 빈도는 매우 낮지만 두통·어지러움이 심해지면 주의하세요.</p>
 
-          <h3>안전한 조합</h3>
+          <p>안전한 조합</p>
 
-          <h3>레미스타 (레바미피드)</h3>
+          <p>레미스타 (레바미피드)</p>
           <p>위점막 보호제입니다. NSAID인 아크로펜의 위장 부작용을 줄이기 위해 의도적으로 함께 처방된 약이므로, 반드시 빠뜨리지 말고 드세요.</p>
 
-          <h3>엔테론 (포도씨 추출물)</h3>
+          <p>엔테론 (포도씨 추출물)</p>
           <p>항산화 보조제로, 다른 처방약과 임상적으로 의미 있는 상호작용은 보고되지 않았습니다.</p>
 
           <p>
@@ -455,7 +446,7 @@
     </div>
 
     <!-- User message: 위험약물 -->
-    <div class="message-row user" role="article" aria-label="사용자 메시지">
+    <div class="message-row user">
       <div>
         <div class="bubble">
           <span class="tag tag-user">사용자</span>
@@ -465,20 +456,20 @@
     </div>
 
     <!-- Bot response: 위험약물 -->
-    <div class="message-row bot" role="article" aria-label="복약도우미 응답">
+    <div class="message-row bot">
       <div>
         <div class="bubble">
           <span class="tag tag-bot">챗봇</span>
           <p>처방약 중 주의 등급이 높은 약 2가지를 알려드릴게요.</p>
 
-          <h3>유토펜 세미 (트라마돌+아세트아미노펜) — 주의 등급 높음</h3>
+          <p>유토펜 세미 (트라마돌+아세트아미노펜) — 주의 등급 높음</p>
           <p>트라마돌은 향정신성 의약품(마약류 관리 대상)입니다. 주의할 점은 다음과 같습니다.</p>
           <p>졸음·어지러움이 생길 수 있어 운전이나 기계 조작을 피해야 합니다. 술과 절대 함께 드시면 안 됩니다. 호흡억제 위험이 있습니다. 처방된 용량을 초과하면 안 됩니다. 의존성이 생길 수 있어 장기 복용 시 의사와 상의가 필요합니다. 아세트아미노펜이 포함되어 있으므로 다른 감기약이나 진통제에도 아세트아미노펜이 들어 있는지 반드시 확인하세요. 하루 아세트아미노펜 총량이 4,000mg을 넘으면 간 손상 위험이 있습니다.</p>
 
-          <h3>아크로펜 (아세클로페낙) — 주의 등급 중간</h3>
+          <p>아크로펜 (아세클로페낙) — 주의 등급 중간</p>
           <p>NSAID 계열로 장기 복용 시 위장출혈, 위궤양 위험이 있습니다. 심혈관 질환(심장병, 고혈압)이 있으시면 반드시 의사에게 알려야 합니다. 검은색 변이나 구토에 피가 섞이면 즉시 병원에 가세요. 레미스타(위점막 보호제)가 함께 처방된 이유가 바로 이 부작용을 줄이기 위해서입니다.</p>
 
-          <h3>나머지 3가지 — 일반 주의</h3>
+          <p>나머지 3가지 — 일반 주의</p>
           <p>엔테론(포도씨 추출물), 넥신에프(은행엽추출물), 레미스타(레바미피드)는 상대적으로 안전한 약입니다. 다만 넥신에프는 수술 예정이 있으면 출혈 위험 때문에 1~2주 전에 중단해야 하니, 수술 일정이 있다면 미리 말씀해 주세요.</p>
 
           <p>정리하면, 유토펜 세미가 가장 주의가 필요한 약입니다. 졸음이 올 수 있으니 복용 후 외출이나 운전에 특히 조심하시고, 다른 진통제나 감기약을 함께 드시기 전에 꼭 저한테 물어봐 주세요.</p>
@@ -487,7 +478,7 @@
     </div>
 
     <!-- User message: 커피 상호작용 -->
-    <div class="message-row user" role="article" aria-label="사용자 메시지">
+    <div class="message-row user">
       <div>
         <div class="bubble">
           <span class="tag tag-user">사용자</span>
@@ -497,19 +488,19 @@
     </div>
 
     <!-- Bot response -->
-    <div class="message-row bot" role="article" aria-label="복약도우미 응답">
+    <div class="message-row bot">
       <div>
         <div class="bubble">
           <span class="tag tag-bot">챗봇</span>
           <p>확인해보니 처방약들 가운데 커피(카페인)와 반드시 피해야 한다고 명시된 약은 없습니다. 요점만 간단히 알려드릴게요.</p>
 
-          <h3>유토펜 세미 (트라마돌+아세트아미노펜)</h3>
+          <p>유토펜 세미 (트라마돌+아세트아미노펜)</p>
           <p>커피와의 명백한 금기는 없습니다. 다만 알코올·진정제와 같이 복용하면 호흡억제·과도한 진정 위험이 있으니 술은 피하세요.</p>
 
-          <h3>아크로펜정 (아세클로페낙, NSAID)</h3>
+          <p>아크로펜정 (아세클로페낙, NSAID)</p>
           <p>커피 자체와 금기는 아니지만 속쓰림·위장출혈 위험이 있으니 공복에 진하게 마시는 커피는 피하는 편이 좋습니다.</p>
 
-          <h3>엔테론 (포도씨 추출물), 넥신에프 (은행엽추출물), 레미스타 (레바미피드)</h3>
+          <p>엔테론 (포도씨 추출물), 넥신에프 (은행엽추출물), 레미스타 (레바미피드)</p>
           <p>일반적으로 커피와 직접적인 금기는 보고되지 않았습니다.</p>
 
           <p>
@@ -521,7 +512,7 @@
 
 
     <!-- User message -->
-    <div class="message-row user" role="article" aria-label="사용자 메시지">
+    <div class="message-row user">
       <div>
         <div class="bubble">
           <span class="tag tag-user">사용자</span>
@@ -531,20 +522,20 @@
     </div>
 
     <!-- Bot response -->
-    <div class="message-row bot" role="article" aria-label="복약도우미 응답">
+    <div class="message-row bot">
       <div>
         <div class="bubble">
           <span class="tag tag-bot">챗봇</span>
           <p>하루 커피 3잔이면 크게 문제될 가능성은 낮습니다. 다만 주의할 점만 간단히 알려드릴게요.</p>
 
-          <h3>트라마돌+아세트아미노펜 (유토펜)</h3>
+          <p>트라마돌+아세트아미노펜 (유토펜)</p>
           <p>커피 자체와 직접적인 심한 상호작용은 없지만 카페인으로 인한 불면·불안·가슴두근거림이 생기면 진통제 부작용(어지러움, 졸음 등)이 더 불편하게 느껴질 수 있습니다.</p>
           <p>아세트아미노펜의 간독성 위험이 있으니 술을 많이 마실 때까지 술은 피하세요.</p>
 
-          <h3>아세클로페낙 (아크로펜)</h3>
+          <p>아세클로페낙 (아크로펜)</p>
           <p>커피는 공복에 진하게 마시면 속쓰림·위장 불편을 더 잘 느낄 수 있으니, 약처럼 아침·저녁 식후 복용하신다면 식사 후에 커피를 드시는 편이 안전합니다.</p>
 
-          <h3>다른 보조제 (엔테론, 넥신에프, 레미스타)</h3>
+          <p>다른 보조제 (엔테론, 넥신에프, 레미스타)</p>
           <p>커피와 큰 문제는 없습니다.</p>
 
           <p>
@@ -556,7 +547,7 @@
 
 
     <!-- User message -->
-    <div class="message-row user" role="article" aria-label="사용자 메시지">
+    <div class="message-row user">
       <div>
         <div class="bubble">
           <span class="tag tag-user">사용자</span>
@@ -566,36 +557,36 @@
     </div>
 
     <!-- Bot response -->
-    <div class="message-row bot" role="article" aria-label="복약도우미 응답">
+    <div class="message-row bot">
       <div>
         <div class="bubble">
           <span class="tag tag-bot">챗봇</span>
           <p>10월 15일 복용 기록을 모두 저장했습니다.</p>
 
-          <div class="rx-card" role="list" aria-label="기록된 약 목록">
+          <div class="rx-card">
             <div class="rx-card-title">기록된 약</div>
-            <ul class="record-list" role="list">
-              <li role="listitem">
+            <div class="record-list">
+              <div>
                 유토펜세미정 — 2025-10-15 복용
                 <br><span class="record-id">ID: 640004590</span>
-              </li>
-              <li role="listitem">
+              </div>
+              <div>
                 아크로펜정 (아세클로페낙) — 2025-10-15 복용
                 <br><span class="record-id">ID: 642502460</span>
-              </li>
-              <li role="listitem">
+              </div>
+              <div>
                 엔테론정 150mg — 2025-10-15 복용
                 <br><span class="record-id">ID: 645301210</span>
-              </li>
-              <li role="listitem">
+              </div>
+              <div>
                 넥신에프정 80mg — 2025-10-15 복용
                 <br><span class="record-id">ID: 644700140</span>
-              </li>
-              <li role="listitem">
+              </div>
+              <div>
                 레미스타정 — 2025-10-15 복용
                 <br><span class="record-id">ID: 657306920</span>
-              </li>
-            </ul>
+              </div>
+            </div>
           </div>
 
           <p>다른 날짜도 기록하거나 복용 횟수를 확인할까요?</p>
